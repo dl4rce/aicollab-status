@@ -53,7 +53,7 @@ export default function Index({ config, kvMonitors, kvMonitorsLastUpdate }) {
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="flex flex-row justify-between items-center py-6 px-2">
-          <div className="flex flex-row items-center">
+          <a href="https://aicollab.app" className="flex flex-row items-center no-underline hover:opacity-80 transition-opacity">
             <img className="h-8 w-auto" src={config.settings.logo} />
             <h1 className="ml-3 text-2xl font-bold">
               <span style={{
@@ -64,7 +64,7 @@ export default function Index({ config, kvMonitors, kvMonitorsLastUpdate }) {
               }}>AI·Collab</span>
               <span className="text-gray-300 font-medium ml-2">Status</span>
             </h1>
-          </div>
+          </a>
           <div className="flex flex-row items-center">
             <MonitorFilter active={slash} callback={filterByTerm} />
           </div>
