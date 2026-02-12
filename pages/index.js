@@ -7,7 +7,6 @@ import config from '../config.yaml'
 import MonitorCard from '../src/components/monitorCard'
 import MonitorFilter from '../src/components/monitorFilter'
 import MonitorStatusHeader from '../src/components/monitorStatusHeader'
-import ThemeSwitcher from '../src/components/themeSwitcher'
 
 const MonitorStore = new Store({
   monitors: config.monitors,
@@ -23,7 +22,6 @@ const filterByTerm = (term) =>
   }))
 
 export async function getEdgeProps() {
-  // get KV data
   const kvMonitors = await getKVMonitors()
 
   return {
@@ -32,7 +30,6 @@ export async function getEdgeProps() {
       kvMonitors: kvMonitors ? kvMonitors.monitors : {},
       kvMonitorsLastUpdate: kvMonitors ? kvMonitors.lastUpdate : {},
     },
-    // Revalidate these props once every x seconds
     revalidate: 5,
   }
 }
@@ -42,43 +39,41 @@ export default function Index({ config, kvMonitors, kvMonitorsLastUpdate }) {
   const slash = useKeyPress('/')
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-900">
       <Head>
         <title>{config.settings.title}</title>
         <link rel="stylesheet" href="./style.css" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <script>
-          {`
-          function setTheme(theme) {
-            document.documentElement.classList.remove("dark", "light")
-            document.documentElement.classList.add(theme)
-            localStorage.theme = theme
-          }
-          (() => {
-            const query = window.matchMedia("(prefers-color-scheme: dark)")
-            query.addListener(() => {
-              setTheme(query.matches ? "dark" : "light")
-            })
-            if (["dark", "light"].includes(localStorage.theme)) {
-              setTheme(localStorage.theme)
-            } else {
-              setTheme(query.matches ? "dark" : "light")
-            }
-          })()
-          `}
+          {`document.documentElement.classList.add("dark")`}
         </script>
       </Head>
-      <div className="container mx-auto px-4">
-        <div className="flex flex-row justify-between items-center p-4">
+      <div className="container mx-auto px-4 max-w-4xl">
+        {/* Header */}
+        <div className="flex flex-row justify-between items-center py-6 px-2">
           <div className="flex flex-row items-center">
             <img className="h-8 w-auto" src={config.settings.logo} />
-            <h1 className="ml-4 text-3xl">{config.settings.title}</h1>
+            <h1 className="ml-3 text-2xl font-bold">
+              <span style={{
+                background: 'linear-gradient(135deg, #7c3aed, #3b82f6)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}>AI·Collab</span>
+              <span className="text-gray-300 font-medium ml-2">Status</span>
+            </h1>
           </div>
           <div className="flex flex-row items-center">
-            {typeof window !== 'undefined' && <ThemeSwitcher />}
             <MonitorFilter active={slash} callback={filterByTerm} />
           </div>
         </div>
+
+        {/* Status Header */}
         <MonitorStatusHeader kvMonitorsLastUpdate={kvMonitorsLastUpdate} />
+
+        {/* Monitor Cards */}
         {state.visible.map((monitor, key) => {
           return (
             <MonitorCard
@@ -88,23 +83,37 @@ export default function Index({ config, kvMonitors, kvMonitorsLastUpdate }) {
             />
           )
         })}
-        <div className="flex flex-row justify-between mt-4 text-sm">
+
+        {/* External Services */}
+        <div className="mt-6 p-4 rounded-xl border border-gray-700 bg-gray-800 bg-opacity-50">
+          <div className="text-sm font-semibold mb-2 text-gray-300">External Service Status</div>
+          <div className="text-sm space-y-1">
+            <div>
+              <span className="text-gray-500">Payments (Freemius): </span>
+              <a href="https://status.freemius.com/" target="_blank" rel="noopener" className="text-purple-400 hover:text-purple-300 hover:underline">
+                status.freemius.com
+              </a>
+            </div>
+            <div>
+              <span className="text-gray-500">Payments (Stripe): </span>
+              <a href="https://status.stripe.com/" target="_blank" rel="noopener" className="text-purple-400 hover:text-purple-300 hover:underline">
+                status.stripe.com
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex flex-row justify-between mt-6 mb-8 text-xs text-gray-500">
           <div>
             Powered by{' '}
-            <a href="https://workers.cloudflare.com/" target="_blank">
-              Cloudflare Workers{' '}
-            </a>
-            &{' '}
-            <a href="https://flareact.com/" target="_blank">
-              Flareact{' '}
+            <a href="https://workers.cloudflare.com/" target="_blank" className="text-gray-400 hover:text-purple-400">
+              Cloudflare Workers
             </a>
           </div>
           <div>
-            <a
-              href="https://github.com/eidam/cf-workers-status-page"
-              target="_blank"
-            >
-              Get Your Status Page
+            <a href="https://aicollab.app" target="_blank" className="text-gray-400 hover:text-purple-400">
+              aicollab.app
             </a>
           </div>
         </div>

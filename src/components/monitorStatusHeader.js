@@ -2,10 +2,8 @@ import config from '../../config.yaml'
 import { locations } from '../functions/locations'
 
 const classes = {
-  green:
-    'bg-green-200 text-green-700 dark:bg-green-700 dark:text-green-200 border-green-300 dark:border-green-600',
-  yellow:
-    'bg-yellow-200 text-yellow-700 dark:bg-yellow-700 dark:text-yellow-200 border-yellow-300 dark:border-yellow-600',
+  green: 'status-operational',
+  yellow: 'status-degraded',
 }
 
 export default function MonitorStatusHeader({ kvMonitorsLastUpdate }) {
@@ -18,11 +16,11 @@ export default function MonitorStatusHeader({ kvMonitorsLastUpdate }) {
   }
 
   return (
-    <div className={`card mb-4 font-semibold ${classes[color]}`}>
+    <div className={`card mb-4 font-semibold rounded-xl ${classes[color]}`}>
       <div className="flex flex-row justify-between items-center">
         <div>{text}</div>
         {kvMonitorsLastUpdate.time && typeof window !== 'undefined' && (
-          <div className="text-xs font-light">
+          <div className="text-xs font-light opacity-70">
             checked{' '}
             {Math.round((Date.now() - kvMonitorsLastUpdate.time) / 1000)} sec
             ago (from{' '}

@@ -4,7 +4,7 @@ const searchIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
-    className="h-7 mx-auto text-gray-300 dark:text-gray-600"
+    className="h-7 mx-auto text-gray-500"
     fill="currentColor"
   >
     <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
@@ -38,7 +38,7 @@ export default function MonitorFilter({ active, callback }) {
   return (
     <div className="col-span-6 sm:col-span-3 relative">
       <input
-        className="block w-full py-2 px-3 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+        className="block w-full py-2 px-3 border border-gray-600 bg-gray-800 text-gray-200 rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:text-sm placeholder-gray-500"
         type="text"
         value={input}
         onInput={handleInput}

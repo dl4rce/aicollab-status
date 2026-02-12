@@ -1,19 +1,15 @@
-name = "cf-workers-status-page"
+name = "aicollab-status-page"
+main = "dist/main.js"
 workers_dev = true
-account_id = ""
-type = "webpack"
-webpack_config = "node_modules/flareact/webpack"
 compatibility_date = "2021-07-23"
+no_bundle = true
+
+[[kv_namespaces]]
+binding = "KV_STATUS_PAGE"
+id = "6b969f291cd340538c19e09296db5f51"
 
 [triggers]
-crons = ["* * * * *"]
+crons = ["*/5 * * * *"]
 
 [site]
 bucket = "out"
-entry-point = "./"
-
-# uncomment and adjust following if you are not using GitHub Actions
-#[env.production]
-#kv-namespaces = [{binding="KV_STATUS_PAGE", id="xxxx", preview_id=""}]
-#zone_id="xxx"
-#route="xxx"

@@ -1,10 +1,9 @@
 import config from '../../config.yaml'
 
 const classes = {
-  gray: 'bg-gray-200 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
-  green: 'bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200',
-  yellow:
-    'bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200',
+  gray: 'bg-gray-700 text-gray-300',
+  green: 'bg-green-900 text-green-400',
+  yellow: 'bg-yellow-900 text-yellow-400',
 }
 
 export default function MonitorStatusLabel({ kvMonitor }) {

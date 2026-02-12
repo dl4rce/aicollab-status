@@ -1,9 +1,9 @@
 settings:
-  title: 'Status Page'
-  url: 'https://status-page.eidam.dev' # used for Slack messages
-  logo: logo-192x192.png # image in ./public/ folder
-  daysInHistogram: 90 # number of days you want to display in histogram
-  collectResponseTimes: true # collects avg response times from CRON locations
+  title: 'AI·Collab Status'
+  url: 'https://status.aicollab.app'
+  logo: logo-192x192.png
+  daysInHistogram: 90
+  collectResponseTimes: true
 
   allmonitorsOperational: 'All Systems Operational'
   notAllmonitorsOperational: 'Not All Systems Operational'
@@ -12,28 +12,68 @@ settings:
   monitorLabelNoData: 'No data'
   dayInHistogramNoData: 'No data'
   dayInHistogramOperational: 'All good'
-  dayInHistogramNotOperational: ' incident(s)' # xx incident(s) recorded
+  dayInHistogramNotOperational: ' incident(s)'
 
 monitors:
-  - id: workers-cloudflare-com # unique identifier
-    name: workers.cloudflare.com
-    description: 'You write code. They handle the rest.' # default=empty
-    url: 'https://workers.cloudflare.com/' # URL to fetch
-    method: GET # default=GET
-    expectStatus: 200 # operational status, default=200
-    followRedirect: false # should fetch follow redirects, default=false
-    linkable: false # allows the title to be a link, default=true
-
-  - id: www-cloudflare-com
-    name: www.cloudflare.com
-    description: 'Built for anything connected to the Internet.'
-    url: 'https://www.cloudflare.com'
+  - id: website
+    name: Website
+    description: 'aicollab.app — Dashboard & Landing Page'
+    url: 'https://aicollab.app'
     method: GET
     expectStatus: 200
-    linkable: true # allows the title to be a link, default=true
+    followRedirect: true
+    linkable: true
 
-  - id: blog-cloudflare-com
-    name: The Cloudflare Blog
-    url: 'https://blog.cloudflare.com/'
+  - id: chat
+    name: Chat
+    description: 'chat.aicollab.app — AI Chat Platform'
+    url: 'https://chat.aicollab.app/health'
     method: GET
     expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: chat-db
+    name: Chat Database
+    description: 'Internal PostgreSQL — user chats, settings & models'
+    url: 'https://chat.aicollab.app/health/db'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: supabase
+    name: Supabase Platform
+    description: 'Authentication, user data & edge functions'
+    url: 'https://ssewrclkqolhqyrktsje.supabase.co/storage/v1/status'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: ai-openrouter
+    name: AI Models (OpenRouter)
+    description: '300+ AI models — GPT, Claude, Gemini, Grok & more'
+    url: 'https://openrouter.ai/api/v1/models'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: ai-azure-eu
+    name: AI EU Models (Azure Sweden)
+    description: 'EU-hosted model inference — GDPR-compliant routing'
+    url: 'https://aicollab-resource.openai.azure.com/'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: storage
+    name: File Storage
+    description: 'Document uploads & cloud storage (S3)'
+    url: 'https://s3.internet1.de/'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
