@@ -30,6 +30,7 @@
 
   .histogram {
     @apply h-6 w-full mx-auto;
+    overflow: visible;
   }
 
   .hitbox {
@@ -68,12 +69,18 @@
   .tooltip .content {
     @apply invisible absolute z-50 inline-block;
     @apply rounded-lg py-1 px-2 bg-gray-800 border border-gray-600 shadow-xl;
-    @apply opacity-0 transition-all duration-200 scale-50;
+    @apply opacity-0 transition-all duration-200;
     @apply text-gray-200;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.5);
+    white-space: nowrap;
+    pointer-events: none;
   }
 
   .tooltip:hover .content {
-    @apply visible opacity-100 scale-100;
+    @apply visible opacity-100;
+    transform: translateX(-50%) scale(1);
   }
 
   /* Status header variants */
