@@ -2,61 +2,73 @@ import React from 'react'
 import config from '../../config.yaml'
 import MonitorDayAverage from './monitorDayAverage'
 
-export default function MonitorHistogram({ monitorId, kvMonitor }) {
-  // create date and set date - daysInHistogram for the first day of the histogram
-  let date = new Date()
-  date.setDate(date.getDate() - config.settings.daysInHistogram)
+/** YYYY-MM-DD in UTC — must match cronTrigger.getDate() (Worker uses toISOString). */
+function utcDayString(d) {
+  return d.toISOString().split('T')[0]
+}
 
-  let content = null
-
-  if (typeof window !== 'undefined') {
-    content = Array.from(Array(config.settings.daysInHistogram).keys()).map(
-      (key) => {
-        date.setDate(date.getDate() + 1)
-        const dayInHistogram = date.toISOString().split('T')[0]
-
-        let bg = ''
-        let dayInHistogramLabel = config.settings.dayInHistogramNoData
-
-        // filter all dates before first check, then check the rest
-        if (kvMonitor && kvMonitor.firstCheck <= dayInHistogram) {
-          if (
-            kvMonitor.checks.hasOwnProperty(dayInHistogram) &&
-            kvMonitor.checks[dayInHistogram].fails > 0
-          ) {
-            bg = 'yellow'
-            dayInHistogramLabel = `${kvMonitor.checks[dayInHistogram].fails} ${config.settings.dayInHistogramNotOperational}`
-          } else {
-            bg = 'green'
-            dayInHistogramLabel = config.settings.dayInHistogramOperational
-          }
-        }
-
-        return (
-          <div key={key} className="hitbox tooltip">
-            <div className={`${bg} bar`} />
-            <div className="content text-center py-1 px-2 text-xs">
-              {dayInHistogram}
-              <br />
-              <span className="font-semibold text-sm">
-                {dayInHistogramLabel}
-              </span>
-              {kvMonitor &&
-                kvMonitor.checks.hasOwnProperty(dayInHistogram) &&
-                Object.keys(kvMonitor.checks[dayInHistogram].res).map((key) => {
-                  return (
-                    <MonitorDayAverage
-                      location={key}
-                      avg={kvMonitor.checks[dayInHistogram].res[key].a}
-                    />
-                  )
-                })}
-            </div>
-          </div>
-        )
-      },
-    )
+/**
+ * Same window as the original: (todayUTC − daysCount) exclusive lower bound after +1 per step,
+ * ending at today UTC — daysCount bars from (today − 89d) through today when daysCount === 90.
+ */
+function getHistogramUtcDayStrings(daysCount) {
+  const out = []
+  const now = new Date()
+  const y = now.getUTCFullYear()
+  const mo = now.getUTCMonth()
+  const day = now.getUTCDate()
+  for (let i = 0; i < daysCount; i++) {
+    const d = new Date(Date.UTC(y, mo, day - daysCount + i + 1))
+    out.push(utcDayString(d))
   }
+  return out
+}
+
+export default function MonitorHistogram({ monitorId, kvMonitor }) {
+  const daysCount = config.settings.daysInHistogram
+  const dayStrings = getHistogramUtcDayStrings(daysCount)
+  const checks = kvMonitor && kvMonitor.checks ? kvMonitor.checks : {}
+
+  const content = dayStrings.map((dayInHistogram, idx) => {
+    let bg = ''
+    let dayInHistogramLabel = config.settings.dayInHistogramNoData
+
+    if (kvMonitor && kvMonitor.firstCheck <= dayInHistogram) {
+      if (
+        Object.prototype.hasOwnProperty.call(checks, dayInHistogram) &&
+        checks[dayInHistogram].fails > 0
+      ) {
+        bg = 'yellow'
+        dayInHistogramLabel = `${checks[dayInHistogram].fails} ${config.settings.dayInHistogramNotOperational}`
+      } else {
+        bg = 'green'
+        dayInHistogramLabel = config.settings.dayInHistogramOperational
+      }
+    }
+
+    const dayRes =
+      checks[dayInHistogram] && checks[dayInHistogram].res
+        ? checks[dayInHistogram].res
+        : {}
+
+    return (
+      <div key={idx} className="hitbox tooltip">
+        <div className={`${bg} bar`} />
+        <div className="content text-center py-1 px-2 text-xs">
+          {dayInHistogram}
+          <br />
+          <span className="font-semibold text-sm">{dayInHistogramLabel}</span>
+          {Object.keys(dayRes).map((locKey) => (
+            <MonitorDayAverage
+              key={locKey}
+              location={locKey}
+              avg={dayRes[locKey].a}
+            />
+          ))}
+        </div>
+      </div>
+    )
+  })
 
   return (
     <div

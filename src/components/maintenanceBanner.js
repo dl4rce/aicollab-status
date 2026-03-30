@@ -27,9 +27,6 @@ export default function MaintenanceBanner() {
   const m = config.maintenance
   if (!m || !m.enabled) return null
 
-  // Only render on client side (Date.now() not available during SSR edge render)
-  if (typeof window === 'undefined') return null
-
   if (!isActive(m.start, m.end)) return null
 
   const now = Date.now()
