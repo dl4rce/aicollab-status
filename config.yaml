@@ -1,13 +1,15 @@
 # Planned maintenance windows.
-# Set enabled: true and fill in the fields to show the banner.
-# The banner auto-hides when the end time has passed.
-# Dates must be ISO 8601 UTC strings, e.g. "2026-04-01T22:00:00Z"
+# Set enabled: true and fill in start/end as ISO 8601 UTC.
+# Banner shows PLANNED (before start) or ACTIVE (between start and end), then hides after end.
+# displayTimeZone: IANA zone for human-readable times on the status page (default Europe/Berlin = MESZ/MEZ).
 maintenance:
-  enabled: false
-  title: 'Scheduled Maintenance'
-  description: 'We will be performing infrastructure upgrades. AI chat and model access may be intermittently unavailable.'
-  start: '2026-04-01T22:00:00Z'
-  end: '2026-04-02T02:00:00Z'
+  enabled: true
+  announceDaysBefore: 21
+  displayTimeZone: 'Europe/Berlin'
+  title: 'Infrastructure maintenance'
+  description: 'We will perform infrastructure upgrades. AI chat and some model routes may be intermittently unavailable.'
+  start: '2026-04-04T17:00:00Z'
+  end: '2026-04-04T19:00:00Z'
   affectedServices:
     - 'Chat'
     - 'AI Models (OpenRouter)'
