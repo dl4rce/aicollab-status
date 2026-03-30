@@ -7,8 +7,9 @@
   "private": true,
   "scripts": {
     "dev": "flareact dev",
-    "build": "yarn css && flareact build",
-    "deploy": "yarn build && flareact publish",
+    "build:worker": "NODE_ENV=production webpack --config node_modules/flareact/webpack.js --mode production",
+    "build": "yarn css && flareact build && cp -r public/* out/ && yarn build:worker",
+    "deploy": "yarn build && wrangler deploy",
     "kv-gc": "node ./src/cli/gcMonitors.js",
     "format": "prettier --write '**/*.{js,css,json,md}'",
     "css": "postcss public/tailwind.css -o public/style.css"
