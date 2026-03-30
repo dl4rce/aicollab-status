@@ -134,3 +134,9 @@ worker/
 out/
 package-lock.json
 public/style.css
+
+# Local backups / editor artifacts (may contain same URLs as config; keep out of git)
+*.bak
+*.bak_*
+**/*.bak_*
+config.yaml.bak*
