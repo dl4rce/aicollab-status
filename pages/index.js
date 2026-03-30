@@ -7,6 +7,7 @@ import config from '../config.yaml'
 import MonitorCard from '../src/components/monitorCard'
 import MonitorFilter from '../src/components/monitorFilter'
 import MonitorStatusHeader from '../src/components/monitorStatusHeader'
+import MaintenanceBanner from '../src/components/maintenanceBanner'
 
 const MonitorStore = new Store({
   monitors: config.monitors,
@@ -72,6 +73,9 @@ export default function Index({ config, kvMonitors, kvMonitorsLastUpdate }) {
             <MonitorFilter active={slash} callback={filterByTerm} />
           </div>
         </div>
+
+        {/* Planned Maintenance Banner — only shown when enabled in config.yaml */}
+        <MaintenanceBanner />
 
         {/* Status Header */}
         <MonitorStatusHeader kvMonitorsLastUpdate={kvMonitorsLastUpdate} />
