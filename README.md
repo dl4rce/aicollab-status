@@ -23,6 +23,21 @@ Also, prepare the following secrets
 
 ## Getting started
 
+### Configure this checkout
+
+This repository **does not commit** real `config.yaml` or `wrangler.toml` (template / public-safe). After clone:
+
+```bash
+cp config.example.yaml config.yaml
+cp wrangler.example.toml wrangler.toml
+# Edit both files: set your URLs, Worker name, and KV namespace id.
+```
+
+Then `yarn install`, `yarn build`, `npx wrangler deploy` with Wrangler logged in.  
+The bundled `config.example.yaml` uses neutral placeholders (`example.com`, fake maintenance window).
+
+---
+
 You can either deploy with **Cloudflare Deploy Button** using GitHub Actions or deploy on your own.
 
 ### Deploy with Cloudflare Deploy Button

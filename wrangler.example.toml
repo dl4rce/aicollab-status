@@ -1,4 +1,6 @@
-name = "aicollab-status-page"
+# Example — copy to `wrangler.toml` and set your Worker name + KV namespace id.
+
+name = "your-status-page-worker"
 main = "dist/main.js"
 workers_dev = true
 compatibility_date = "2021-07-23"
@@ -6,7 +8,7 @@ no_bundle = true
 
 [[kv_namespaces]]
 binding = "KV_STATUS_PAGE"
-id = "6b969f291cd340538c19e09296db5f51"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_UUID"
 
 [triggers]
 crons = ["*/5 * * * *"]

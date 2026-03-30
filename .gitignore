@@ -140,3 +140,7 @@ public/style.css
 *.bak_*
 **/*.bak_*
 config.yaml.bak*
+
+# Production endpoints & Cloudflare IDs — kept only locally or in private aicollab-nexus bundle
+config.yaml
+wrangler.toml

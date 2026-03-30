@@ -1,0 +1,84 @@
+# Example configuration — copy to `config.yaml` and replace placeholders.
+# Real endpoints must NOT be committed on a public template repo.
+
+maintenance:
+  enabled: false
+  announceDaysBefore: 21
+  displayTimeZone: 'Europe/Berlin'
+  title: 'Scheduled maintenance'
+  description: 'Template description.'
+  start: '2099-01-01T12:00:00Z'
+  end: '2099-01-01T14:00:00Z'
+  affectedServices:
+    - 'Example service'
+
+settings:
+  title: 'Example Status Page'
+  url: 'https://status.example.com'
+  logo: logo-192x192.png
+  daysInHistogram: 90
+  collectResponseTimes: true
+
+  allmonitorsOperational: 'All Systems Operational'
+  notAllmonitorsOperational: 'Not All Systems Operational'
+  monitorLabelOperational: 'Operational'
+  monitorLabelNotOperational: 'Not Operational'
+  monitorLabelNoData: 'No data'
+  dayInHistogramNoData: 'No data'
+  dayInHistogramOperational: 'All good'
+  dayInHistogramNotOperational: ' incident(s)'
+
+monitors:
+  - id: website
+    name: Website
+    description: 'Landing page'
+    url: 'https://example.com'
+    method: GET
+    expectStatus: 200
+    followRedirect: true
+    linkable: true
+
+  - id: api
+    name: API health
+    description: 'Example API /health'
+    url: 'https://example.com/health'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: backend
+    name: Backend
+    description: 'Replace with your provider status URL'
+    url: 'https://YOUR_PROJECT_REF.supabase.co/storage/v1/status'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: models-public
+    name: Public model catalog
+    description: 'Public OpenRouter catalog (example third-party check)'
+    url: 'https://openrouter.ai/api/v1/models'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: llm-hosting
+    name: LLM hosting endpoint
+    description: 'Replace with YOUR_RESOURCE.openai.azure.com or remove'
+    url: 'https://example.com'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: object-storage
+    name: Object storage
+    description: 'Replace with your S3-compatible HEAD/GET check URL'
+    url: 'https://example.com'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
