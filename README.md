@@ -1,5 +1,7 @@
 # Cloudflare Worker - Status Page
 
+**AI·Collab live instance** (`status.aicollab.app`): deploy, Worker vs client build, and maintenance (PLANNED/ACTIVE) are documented in **[`DEPLOYMENT.md`](./DEPLOYMENT.md)** and in the main docs repo `documentation/core/operations/STATUS_PAGE.md`.
+
 Monitor your websites, showcase status including daily history, and get Slack notification whenever your website status changes. Using **Cloudflare Workers**, **CRON Triggers,** and **KV storage**. Check [my status page](https://status-page.eidam.dev) out! 🚀
 
 ![Status Page](.gitbook/assets/status_page_screenshot.png)
