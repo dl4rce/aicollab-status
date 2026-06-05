@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+      # Lightweight build gate: tailwind CSS build runs without Cloudflare
+      # secrets, so it validates that the dependency tree installs and the
+      # toolchain runs. The full `flareact build` needs CF env, so it is not
+      # run in CI to avoid false failures on dependency PRs.
+      - name: CSS build (dependency sanity gate)
+        run: yarn css
