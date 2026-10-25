@@ -143,8 +143,28 @@ There is also a managed version of this project, currently in beta. Feel free to
 ## Running project locally
 **Requirements**
 - Linux or WSL
-- Yarn (`npm i -g yarn`)
-- Node 14+
+- Yarn Classic 1.22.22 (pinned in `package.json`)
+- Node 20 (compatibility validation uses 20.20.2)
+
+### Dependency compatibility and security containment
+
+Install with `yarn install --frozen-lockfile --non-interactive`. The legacy
+Webpack 4 worker defaults to `terser-webpack-plugin` 1, whose synchronous
+minifier API cannot consume the retained Terser 5 security resolution. The
+scoped `**/webpack/terser-webpack-plugin` resolution selects version 4.2.3,
+which supports Webpack 4 and awaits Terser 5; client and worker builds therefore
+use the compatible minifier without disabling production optimization.
+
+The scoped `**/cacache/tar` resolution selects tar 7.5.22. Yarn intentionally
+warns that it is outside cacache's declared `^6.0.2` range. This is bounded
+containment validated with actual cache reuse, corruption recovery and archive
+fixtures, not a claim of general tar 6/7 API compatibility or upstream support.
+It does not eliminate all remaining legacy dependency advisories.
+
+Before release, validate `yarn css`, `yarn flareact build`, and
+`yarn build:worker` in that order with a local `config.yaml`. These are build
+checks, not a deployment or live monitoring integration test. Hosted CI currently
+checks installation and CSS only; it does not establish worker build coverage.
 
 ### Steps to get server up and running
 **Install wrangler**
