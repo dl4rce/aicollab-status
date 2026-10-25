@@ -9,12 +9,12 @@ const parser = require('postcss-selector-parser');
 const cssnano = require('cssnano');
 const { optimize } = require('svgo');
 const webpack = require(require.resolve('webpack', { paths: [require.resolve('flareact')] }));
-const OptimizeCSS = require('optimize-css-assets-webpack-plugin');
+const OptimizeCSS = require('css-minimizer-webpack-plugin');
 
 (async () => {
   assert.equal(require('postcss-selector-parser/package.json').version, '7.1.6');
-  assert.equal(require('svgo/package.json').version, '2.8.4');
-  assert.equal(require('optimize-css-assets-webpack-plugin/package.json').version, '6.0.1');
+  assert.equal(typeof optimize, 'function');
+  assert.equal(require('css-minimizer-webpack-plugin/package.json').version, '7.0.4');
   const selectors = ['.foo:hover > a[href="x"]', '#id:not(.disabled)', '.sm\\:flex::before', '[data-v="a b"]', ':is(.a,.b) > *', '.a + .b ~ span', ':root', 'svg|a'];
   for (const selector of selectors) {
     const ast = parser().astSync(selector);
@@ -43,7 +43,7 @@ const OptimizeCSS = require('optimize-css-assets-webpack-plugin');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'status-css-security-'));
   try {
     fs.writeFileSync(path.join(dir, 'index.js'), 'module.exports = 42;');
-    class CSSFixture { apply(compiler) { compiler.hooks.compilation.tap('CSSFixture', compilation => { compilation.hooks.additionalAssets.tapAsync('CSSFixture', callback => { compilation.assets['fixture.css'] = { source: () => css, size: () => Buffer.byteLength(css) }; callback(); }); }); } }
+    class CSSFixture { apply(compiler) { compiler.hooks.compilation.tap('CSSFixture', compilation => { compilation.hooks.additionalAssets.tapAsync('CSSFixture', callback => { compilation.emitAsset('fixture.css', new webpack.sources.RawSource(css)); callback(); }); }); } }
     const stats = await new Promise((resolve, reject) => webpack({ mode: 'production', context: dir, entry: './index.js', output: { path: path.join(dir, 'dist'), filename: 'out.js' }, optimization: { minimizer: [new OptimizeCSS()] }, plugins: [new CSSFixture()] }, (error, result) => error ? reject(error) : resolve(result)));
     assert(!stats.hasErrors(), stats.toString({ errors: true }));
     const built = fs.readFileSync(path.join(dir, 'dist/fixture.css'), 'utf8');
