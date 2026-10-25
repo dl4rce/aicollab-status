@@ -23,6 +23,30 @@ Also, prepare the following secrets
 
 ## Getting started
 
+### Security dependency compatibility (Node 20)
+
+`flareact@0.10.1` remains on Webpack 4. Its CSS optimizer is scoped to
+`optimize-css-assets-webpack-plugin@6.0.1`, whose declared peer supports Webpack 4
+and which uses cssnano 5 / PostCSS 8 / SVGO 2. SVGO is pinned to patched 2.8.4.
+The selector-parser 7.1.6 resolution crosses the old parent ranges; it is covered
+by actual Tailwind CSS/client/worker builds and API/escaping/mutation/SVG/optimizer
+regressions, not assumed compatible from its version alone.
+
+Run `node scripts/test-security-patches.cjs` and
+`node scripts/test-css-security.cjs` after the frozen Yarn install. The latter
+uses deterministic local fixtures and an actual Webpack 4 CSS compilation.
+The orphan `node-forge` resolution was removed: the installed certificate parent
+already uses `@peculiar/x509` / `pkijs`, not forge.
+
+Remaining legacy risks are not dismissed: Webpack 4's browser crypto polyfills
+retain unpatched elliptic; patched dev middleware requires Webpack 5. The existing
+Flareact development-server major override also does not establish a working
+modern dev server. Yarn separately reports uuid (v3/v5/v6 caller-provided buffer
+bounds); current logging/SockJS parents use v4, but the dependency remains.
+A framework/Webpack migration or supported parent/API replacement is a separate
+compatibility decision; neither fake crypto stubs nor global middleware overrides
+are used here.
+
 ### Configure this checkout
 
 This repository **does not commit** real `config.yaml` or `wrangler.toml` (template / public-safe). After clone:
