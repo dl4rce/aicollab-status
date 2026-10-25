@@ -166,6 +166,16 @@ Before release, validate `yarn css`, `yarn flareact build`, and
 checks, not a deployment or live monitoring integration test. Hosted CI currently
 checks installation and CSS only; it does not establish worker build coverage.
 
+Run `node scripts/test-security-patches.cjs` for deterministic in-memory HTTP
+body parsing/compression, query parsing, YAML/URI/schema/source-map handling,
+PBKDF2 parity, serialization, editor-command rejection, and the actual default
+Webpack production minimizer. No live service or editor process is invoked.
+Compatible patch floors refresh stale lock entries; they do not remove the
+remaining SVGO 1, selector-parser, Webpack middleware, or crypto dependency
+constraints. Existing out-of-range legacy resolutions still require full build
+and cache regression validation; a successful build is not proof of production
+runtime reachability or a zero-advisory dependency tree.
+
 ### Steps to get server up and running
 **Install wrangler**
 ```
