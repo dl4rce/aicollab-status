@@ -1,0 +1,10 @@
+{
+  "upstream": "https://github.com/flareact/flareact",
+  "sourcePackage": "flareact@0.10.1",
+  "license": "MIT",
+  "npmTarballShasum": "d28af1ff07ea1708831bada6045a0b8dcc520ccf",
+  "npmTarballIntegrity": "sha512-s6/FTaJaHWpV5nCWxTh9kn/wtdsUZNaqOICSYppH+mnIKXLcEZ3aRuwUEPELZ2EoPhTMSHRwRdCyPyHrtvVF5A==",
+  "purpose": "Project-local maintained runtime and build fork; upstream runtime/page APIs preserved, Webpack 4 tooling replaced with declared supported Webpack 5 plugins.",
+  "maintenance": "Update build dependencies in root package.json and yarn.lock; run full security regression suite and clean builds. Never reinstall upstream Flareact dependencies over this local package.",
+  "changes": ["Coherent Webpack5 CLI/loaders/plugins", "Modern asset manifest processAssets hook", "Modern glob page keys", "Loopback devserver with supported options and reload HMR", "No deployment CLI; project scripts build only", "Worker CSS omission retained via explicit local loader"]
+}

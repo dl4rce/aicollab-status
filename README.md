@@ -23,29 +23,43 @@ Also, prepare the following secrets
 
 ## Getting started
 
-### Security dependency compatibility (Node 20)
+### Maintained security build tooling (Node 20 / 22)
 
-`flareact@0.10.1` remains on Webpack 4. Its CSS optimizer is scoped to
-`optimize-css-assets-webpack-plugin@6.0.1`, whose declared peer supports Webpack 4
-and which uses cssnano 5 / PostCSS 8 / SVGO 2. SVGO is pinned to patched 2.8.4.
-The selector-parser 7.1.6 resolution crosses the old parent ranges; it is covered
-by actual Tailwind CSS/client/worker builds and API/escaping/mutation/SVG/optimizer
-regressions, not assumed compatible from its version alone.
+The project-local MIT `vendor/flareact` package preserves Flareact 0.10.1's
+page, routing, SSR, props, asset and Worker APIs. Upstream source/license and
+maintenance rationale are recorded in `vendor/flareact/PROVENANCE.json`.
+Its obsolete build dependency graph was replaced, not hidden: Webpack 5,
+CLI 6, MiniCssExtract 2, CSS minimizer 7, Terser 5, copy plugin 12, modern
+loaders, dev-server 5.2.6 and middleware 7.4.6 are declared at the root.
+Webpack 4's node-libs-browser/crypto-browserify/elliptic ancestry is absent.
+SockJS's UUID resolution uses the supported CommonJS v4 export from patched
+uuid 11.1.1; actual dev-server/API tests cover it. React/page components are
+unchanged. The remaining legacy laco-react peer warning is not a security fix.
 
-Run `node scripts/test-security-patches.cjs` and
-`node scripts/test-css-security.cjs` after the frozen Yarn install. The latter
-uses deterministic local fixtures and an actual Webpack 4 CSS compilation.
-The orphan `node-forge` resolution was removed: the installed certificate parent
-already uses `@peculiar/x509` / `pkijs`, not forge.
+Use Node >=20.19 <23 and Yarn 1.22.22:
 
-Remaining legacy risks are not dismissed: Webpack 4's browser crypto polyfills
-retain unpatched elliptic; patched dev middleware requires Webpack 5. The existing
-Flareact development-server major override also does not establish a working
-modern dev server. Yarn separately reports uuid (v3/v5/v6 caller-provided buffer
-bounds); current logging/SockJS parents use v4, but the dependency remains.
-A framework/Webpack migration or supported parent/API replacement is a separate
-compatibility decision; neither fake crypto stubs nor global middleware overrides
-are used here.
+```bash
+yarn install --frozen-lockfile --non-interactive
+yarn build
+node scripts/test-security-patches.cjs
+node scripts/test-css-security.cjs
+node scripts/test-modern-build.cjs
+node scripts/test-dev-security.cjs
+```
+
+CI now builds the actual client and Worker with `config.example.yaml` and runs
+all regressions with external networking blocked (loopback fixtures permitted).
+Tests exercise existing HTTP/parser behavior, SVG/CSS minification, route assets,
+actual Worker SSR and props, default minifier/filesystem cache corruption recovery,
+and real patched dev-server traversal/CSRF/malformed Host protection.
+`yarn dev` serves client assets on loopback port 8080 and proxies application
+requests to an independently started local Worker on 8787; it does not start or
+deploy a Worker. HMR reload is retained without the obsolete React-refresh plugin.
+
+Future tooling updates must keep the root dependency graph and vendored config
+APIs coordinated. Run a clean frozen install and all tests; do not restore old
+Webpack4 pins or force crypto stubs. No deployment or database operation is part
+of the build/security workflow.
 
 ### Configure this checkout
 
