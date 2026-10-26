@@ -36,7 +36,15 @@ SockJS's UUID resolution uses the supported CommonJS v4 export from patched
 uuid 11.1.1; actual dev-server/API tests cover it. React/page components are
 unchanged. The remaining legacy laco-react peer warning is not a security fix.
 
-Use Node >=20.19 <23 and Yarn 1.22.22:
+Use Node >=22.23.4 <23 and Yarn 1.22.22. CI reads the exact patched version
+from `.node-version` (22.23.4), also a supported Cloudflare Pages build selector.
+This supersedes the historical Node 20 compatibility notes below: Node 20 is
+EOL and must not be used. The [official October 2026 Node security release](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases)
+fixes CVE-2026-111497 in Node 22.23.4. This selects the Node build/development
+runtime, not Cloudflare's managed Worker runtime; it does not establish a
+production deployment or change remote settings.
+
+Run the clean build and isolated regressions:
 
 ```bash
 yarn install --frozen-lockfile --non-interactive
